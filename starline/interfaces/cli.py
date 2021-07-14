@@ -1,5 +1,6 @@
-from model import Message, TelegramMessage
-from . import MessageInterface
+import config
+from model import Message, TelegramMessage, PublishResult, Post
+from . import MessageInterface, PublishInterface
 
 
 class Printer(MessageInterface):
@@ -8,7 +9,19 @@ class Printer(MessageInterface):
 
 
 class TelegramPrinter(Printer):
+    def __init__(self):
+        super().__init__()
+        self.bot_chat = config.TELEGRAM_BOT_CHAT
+
     def send_message(self, tg_msg: TelegramMessage):
-        print('Chat:', tg_msg.chat)
-        print('Sender:', tg_msg.sender)
+        if tg_msg.chat is None:
+            tg_msg.chat = self.bot_chat
+        print('Chat:', tg_msg.chat, end=', ')
+        print('Sender:', tg_msg.sender, end=', ')
         super().send_message(tg_msg)
+
+
+class CliPublisher(PublishInterface):
+    def publish(self, post: Post) -> PublishResult:
+        print(post, 'published!', sep=' ')
+        return PublishResult(success=True, extra=None)

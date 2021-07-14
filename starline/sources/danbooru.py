@@ -1,11 +1,11 @@
-import logging
 from urllib.parse import urlparse
 
 from starline.sources import Source
 from starline.sources.common.booru import BooruDataClient
 from starline.model import Post, PostFile, PostMeta
+from utils import prepare_logger
 
-log = logging.getLogger(__name__)
+log = prepare_logger(__name__)
 
 
 class DanbooruDataClient(BooruDataClient):
@@ -54,7 +54,7 @@ class Danbooru(Source):
             ),
             meta=PostMeta(
                 source=self.ALIAS,
-                post_id=picture_info['id'],
+                post_id=str(picture_info['id']),
                 url=self.data_client.get_post_url(picture_info['id']),
                 authors=set(picture_info['tag_string_artist'].split()),
                 characters=set(picture_info['tag_string_character'].split()),

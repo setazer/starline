@@ -1,13 +1,13 @@
 import json
-import logging
 from dataclasses import dataclass
 from urllib.parse import urlparse
 
 import requests as requests
 
 from starline.model import Post
+from utils import prepare_logger
 
-log = logging.getLogger(__name__)
+log = prepare_logger(__name__)
 
 
 class Source:

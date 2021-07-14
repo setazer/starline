@@ -1,11 +1,11 @@
-import logging
 from urllib.parse import urlparse, parse_qs
 
 from starline.sources import Source
 from starline.sources.common.booru import BooruDataClient
 from starline.model import Post, PostFile, PostMeta
+from utils import prepare_logger
 
-log = logging.getLogger(__name__)
+log = prepare_logger(__name__)
 
 
 class GelbooruDataClient(BooruDataClient):

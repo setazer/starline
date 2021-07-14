@@ -1,4 +1,4 @@
-from pathlib import Path
+import logging
 
 from PIL import Image, UnidentifiedImageError
 from imagehash import dhash
@@ -18,3 +18,21 @@ class Context:
     def __init__(self, **kwargs):
         for attr, value in kwargs.items():
             setattr(self, attr, value)
+
+
+def prepare_logger(name):
+    logger = logging.getLogger(name)
+    logger.propagate = False
+    con = logging.StreamHandler()
+    con.setFormatter(logging.Formatter("%(asctime)s  %(levelname)s  %(name)s\t\t%(message)s"))
+    logger.addHandler(con)
+    return logger
+
+
+class NamedSingleton(type):
+    _instances = {}
+
+    def __call__(cls, name: str, *args, **kwargs):
+        if name not in cls._instances:
+            cls._instances[name] = super(NamedSingleton, cls).__call__(name, *args, **kwargs)
+        return cls._instances[name]

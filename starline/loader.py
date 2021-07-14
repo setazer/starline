@@ -1,12 +1,11 @@
-import logging
 from pathlib import Path
 
 from starline.sources import SourceCollection
 from starline.exceptions import InvalidImage
 from starline.model import Post
-from starline.utils import get_image_hash
+from starline.utils import get_image_hash, prepare_logger
 
-log = logging.getLogger(__name__)
+log = prepare_logger(__name__)
 
 
 class Loader:

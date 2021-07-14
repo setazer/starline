@@ -9,7 +9,7 @@ class Logic:
         self.default_source: Source = context.default_source
         self.sources: SourceCollection = context.sources
 
-    def parse_input(self, tg_message: TelegramMessage):
+    def parse_raw_message(self, tg_message: TelegramMessage):
         param = tg_message.msg.split()
         if source := self.sources.get_source_by_alias(param[0].lower()):
             yield from self._get_posts_from_source(param, source, tg_message)

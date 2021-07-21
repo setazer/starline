@@ -15,14 +15,14 @@ class GelbooruDataClient(BooruDataClient):
     _SEARCH_API_URL = '/index.php?page=dapi&s=post&q=index&tags={}'
     _LOGIN_URL = '/index.php?page=account&s=login&code=00'
 
-    def __init__(self, context):
-        super().__init__(context)
-        self._login = context.login
-        self._password = context.password
+    def __init__(self, login: str, password: str, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._login = login
+        self._password = password
 
     def get_post_id(self, url):
         url_obj = urlparse(url)
-        return parse_qs(url_obj.query)['id'][0]
+        return parse_qs(url_obj.query)[b'id'][0]
 
     def login(self):
         headers = {'user-agent': 'OhaioPoster'}

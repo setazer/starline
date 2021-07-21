@@ -10,9 +10,9 @@ log = prepare_logger(__name__)
 
 class Loader:
 
-    def __init__(self, context):
-        self.images_path: Path = context.images_folder
-        self.sources: SourceCollection = context.sources
+    def __init__(self, images_path: Path, sources: SourceCollection):
+        self.images_path = images_path
+        self.sources: SourceCollection = sources
         self.images_path.mkdir(exist_ok=True)
 
     def load(self, post: Post):
@@ -23,7 +23,8 @@ class Loader:
         try:
             stream = source.data_client.stream_file(post.file.url)
             img, post.file.hash = get_image_hash(stream.raw)
-            img.save(Path(self.images_path) / post.file.name)
+            post.file.name = Path(self.images_path) / post.file.name
+            img.save(post.file.name)
         except InvalidImage:
             post.file.valid = False
             log.error("Error loading image", exc_info=True)

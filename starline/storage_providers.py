@@ -31,9 +31,6 @@ class MemoryStorage(StorageProvider, metaclass=NamedSingleton):
         self._name = name
         super().__init__(storage=set())
 
-    def __iter__(self):
-        return iter(self._storage)
-
     def __repr__(self):
         return "MemoryStorage({})".format(self._storage)
 

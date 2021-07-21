@@ -5,9 +5,9 @@ from starline.model import TelegramMessage, LoggingMessage, PostMeta, Post
 
 
 class Logic:
-    def __init__(self, context):
-        self.default_source: Source = context.default_source
-        self.sources: SourceCollection = context.sources
+    def __init__(self, sources: SourceCollection, default_source: Source):
+        self.sources = sources
+        self.default_source = default_source
 
     def parse_raw_message(self, tg_message: TelegramMessage):
         param = tg_message.msg.split()

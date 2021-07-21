@@ -67,3 +67,9 @@ class LoggingMessage(Message):
 class PublishResult:
     success: bool
     extra: Any = None
+
+
+@dataclass
+class QueueItem:
+    post: Post
+    lock: bool = False

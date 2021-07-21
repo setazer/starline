@@ -11,14 +11,16 @@ log = prepare_logger(__name__)
 
 
 class Client:
-    def __init__(self, context):
-        self.loader: Loader = context.loader
-        self.logic: Logic = context.logic
-        self.queue: QueueProvider = context.queue_provider
-        self.history: StorageProvider = context.history_provider
-        self.output: MessageInterface = context.message_interface
+    def __init__(self, logic: Logic, loader: Loader, queue_provider: QueueProvider, history_provider: StorageProvider,
+                 message_interface: MessageInterface):
+        self.loader = loader
+        self.logic = logic
+        self.queue = queue_provider
+        self.history = history_provider
+        self.output = message_interface
 
     def got_message(self, message: TelegramMessage):
+        log.debug(f"Got message: {message}")
         result_posts = self._parse_message(message)
         loaded_posts = self._load_posts(result_posts)
         self._add_posts_to_queue(loaded_posts)
@@ -30,7 +32,7 @@ class Client:
             if isinstance(result, TelegramMessage):
                 self.output.send_message(result)
             elif isinstance(result, LoggingMessage):
-                logging.log(result.level, result.msg)
+                log.log(result.level, result.msg)
             elif isinstance(result, Post):
                 if self._check_post(result):
                     continue
@@ -64,6 +66,3 @@ class Client:
             self.output.send_message(msg)
             return True
         return False
-
-
-

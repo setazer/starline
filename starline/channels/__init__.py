@@ -17,9 +17,9 @@ class Channel:
     def disable(self):
         self._enabled = False
 
-    def __init__(self, context):
-        self._enabled = context.enabled
-        self.interface: PublishInterface = context.publish_interface
+    def __init__(self, enabled, publish_interface: PublishInterface):
+        self._enabled = enabled
+        self.interface = publish_interface
 
     def publish(self, post) -> PublishResult:
         self.preprocess(post)

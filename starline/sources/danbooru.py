@@ -15,16 +15,16 @@ class DanbooruDataClient(BooruDataClient):
     _SEARCH_API_URL = '/posts.json?tags={}'
     _LOGIN_URL = '/session/new'
 
-    def __init__(self, context):
-        super().__init__(context)
-        self._login = context.login
-        self._api_key = context.api_key
+    def __init__(self, login: str, api_key: str, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._login = login
+        self._api_key = api_key
 
-    def get_post_id(self, url):
+    def get_post_id(self, url: str):
         url_obj = urlparse(url)
         return url_obj.path.rpartition('/')[-1]
 
-    def get_post(self, post_id):
+    def get_post(self, post_id: str):
         response = super().get_post(post_id)
         return self._get_json(response)
 
@@ -40,7 +40,7 @@ class Danbooru(Source):
     ALIAS = 'dan'
     DATA_CLIENT = DanbooruDataClient
 
-    def get_post(self, post_id):
+    def get_post(self, post_id: str):
         post_data = super().get_post(post_id)
         pic = self.wrap_picture(post_data)
         return pic

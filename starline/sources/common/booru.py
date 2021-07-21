@@ -5,9 +5,9 @@ from starline.sources import DataClient
 
 class BooruDataClient(DataClient):
 
-    def __init__(self, context):
+    def __init__(self, excluded_tags: set[str] = None):
         super().__init__()
-        self._excluded_tags: set[str] = context.excluded_tags
+        self._excluded_tags = excluded_tags or set()
 
     def get_post_url(self, post_id):
         return self.get_full_url(self._POST_API_URL.format(post_id))
@@ -25,6 +25,7 @@ class BooruDataClient(DataClient):
 
     def search(self, tags: str):
         tag_list = [quote(tag) for tag in tags.split()]
-        tag_list.append(f'-{self._excluded_tags}')
+        for excluded_tag in self._excluded_tags:
+            tag_list.append(f'-{excluded_tag}')
         search_query = '+'.join(tag_list)
         return self._search(search_query)
